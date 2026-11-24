@@ -1,0 +1,57 @@
+/* Intro SuitBox · o módulo do hero nasce como planta com cotas e se levanta (≈1,9 s); dá para pular.
+   Só aparece na home, uma vez por sessão (use ?intro para rever).
+   Cores iguais às do tema do site (css/tema.css): fundo #f3f7fc/#fff, azul #1456d1, marinho #0a1b3d, âmbar #f2a65a. */
+#intro{display:none}
+html.intro-on #intro{display:grid}
+html.intro-wait{overflow:hidden}
+/* o título do hero só começa a subir quando a intro sai */
+html.intro-wait .wd>span,html.intro-wait .hero h1:before,html.intro-wait .sw.on img{animation-play-state:paused}
+
+#intro{position:fixed;inset:0;z-index:200;place-items:center;overflow:hidden;color:#0a1b3d;
+ background:radial-gradient(60% 55% at 88% 18%,rgba(20,86,209,.2),transparent 70%),radial-gradient(45% 40% at 6% 92%,rgba(242,166,90,.22),transparent 70%),linear-gradient(180deg,#fff,#f3f7fc);
+ transition:transform .5s cubic-bezier(.7,0,.2,1)}
+/* faixa azul → âmbar na borda de baixo (a mesma da barra de leitura do site) */
+#intro:after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,#1456d1,#f2a65a)}
+/* grade de prancheta, a mesma do resto do site */
+#intro:before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(10,27,61,.12) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,rgba(10,27,61,.12) 1px,transparent 1px) 0 0/40px 40px;
+ -webkit-mask-image:radial-gradient(62% 55% at 50% 45%,#000,transparent 82%);mask-image:radial-gradient(62% 55% at 50% 45%,#000,transparent 82%);opacity:0;animation:iFade .6s ease forwards}
+#intro.out{transform:translateY(-104%)}
+#intro.out .i-in,#intro.out .i-skip{opacity:0;transition:opacity .25s ease}
+#intro.out .i-in{transform:translateY(-18px);transition:opacity .25s ease,transform .4s ease}
+#intro.out.fast{transition-duration:.35s}
+
+.i-skip{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 14px);right:16px;min-height:44px;padding:0 18px;background:rgba(255,255,255,.65);border:1.5px solid rgba(20,86,209,.3);border-radius:14px;color:#0b3a99;font:600 13px/1 Archivo,Inter,system-ui,sans-serif;letter-spacing:.02em;cursor:pointer;opacity:0;animation:iFade .4s .5s ease forwards;transition:background .2s,color .2s,border-color .2s}
+.i-skip:hover,.i-skip:focus-visible{background:#1456d1;color:#fff;border-color:#1456d1}
+.i-skip:focus-visible{outline:3px solid #1456d1;outline-offset:3px}
+
+.i-in{position:relative;display:grid;justify-items:center;text-align:center;padding:0 24px}
+.i-mod{width:clamp(280px,84vw,470px);height:auto;overflow:visible}
+
+/* 1 · planta: o contorno se desenha (azul da marca) e as cotas aparecem */
+.p-line{fill:none;stroke:#1456d1;stroke-width:1.8;stroke-dasharray:1;stroke-dashoffset:1;animation:iDraw .45s .05s ease forwards,iGone .3s 1s ease forwards}
+.p-fill{fill:rgba(20,86,209,.12);opacity:0;animation:iFade .3s .3s ease forwards,iGone .3s 1s ease forwards}
+.p-cota{opacity:0;animation:iFade .35s .25s ease forwards}
+.p-sh{opacity:0;animation:iFade .5s 1.05s ease forwards}
+
+/* 2 · painéis de concreto: sobem do chão um a um */
+.pn{opacity:0;animation:iRise .34s cubic-bezier(.2,.8,.2,1) forwards}
+.pn.f1{animation-delay:.42s}.pn.f2{animation-delay:.52s}.pn.e1{animation-delay:.62s}.pn.e2{animation-delay:.7s}
+.p-jn{opacity:0;animation:iFade .3s .95s ease forwards}
+@keyframes iRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+/* 3 · laje de cobertura, portas e janelas, degrau e plantas */
+.p-roof{opacity:0;animation:iDrop .38s .8s cubic-bezier(.2,.8,.2,1) forwards}
+.p-det,.p-step{opacity:0;animation:iFade .3s 1.05s ease forwards}
+.p-pl{opacity:0;animation:iFade .35s 1.15s ease forwards}
+@keyframes iDrop{from{opacity:0;transform:translateY(-34px)}to{opacity:1;transform:none}}
+@keyframes iDraw{to{stroke-dashoffset:0}}
+@keyframes iGone{to{opacity:0}}
+
+/* 4 · marca e lema */
+.i-logo{display:block;width:clamp(170px,26vw,230px);height:auto;margin-top:clamp(10px,2vw,18px);clip-path:inset(0 100% 0 0);transform:translateY(8px);animation:iLogo .5s 1s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes iLogo{to{clip-path:inset(0);transform:none}}
+.i-tag{margin-top:14px;font:500 clamp(13px,1.8vw,16px)/1.4 Archivo,Inter,system-ui,sans-serif;font-stretch:100%;letter-spacing:.01em;color:#3b4a68;opacity:0;transform:translateY(8px);animation:iUp .45s 1.25s ease forwards}
+.i-tag:before{content:"";display:inline-block;width:8px;height:8px;margin-right:10px;border-radius:50%;background:#f2a65a;box-shadow:0 0 12px 3px rgba(242,166,90,.7);vertical-align:1px}
+@keyframes iUp{to{opacity:1;transform:none}}
+@keyframes iFade{to{opacity:1}}
+
+@media(prefers-reduced-motion:reduce){#intro{display:none!important}html.intro-wait{overflow:auto}}
